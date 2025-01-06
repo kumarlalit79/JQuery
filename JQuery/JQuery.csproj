@@ -215,6 +215,7 @@
     <Content Include="Models\JQuery.edmx.diagram">
       <DependentUpon>JQuery.edmx</DependentUpon>
     </Content>
+    <Content Include="DatabaseBackup\JQuery" />
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.0.js" />
     <Content Include="Scripts\jquery-3.7.0.min.js" />
