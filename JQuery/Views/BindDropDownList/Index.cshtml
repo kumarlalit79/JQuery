@@ -1,0 +1,112 @@
+﻿@model JQuery.Models.BindDropDownList
+
+@{
+    ViewBag.Title = "Index";
+}
+
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Binding Country , State & City in Dropdown</h1>
+
+            <div class="row">
+                <div class="col-md-3">Country</div>
+                <div class="col-md-9">
+                    <select id="ddlCountry" class="form-control" onchange="stateList()">
+                            <option>Select Country</option>
+                            @foreach (var item in Model.Countries)
+                            {
+                                <option value="@item.CountryId">@item.CountryName</option>
+                            }
+                        </select>
+                    @*@Html.DropDownList("CountryName", new SelectList(Model.Countries, "CountryId", "CountryName"), "<--Select Countries-->", new { @class = "form-control" })*@
+                </div>
+            </div>
+
+            <br />
+
+            <div class="row">
+                <div class="col-md-3">State</div>
+                <div class="col-md-9">
+                    <select id="ddlState" class="form-control" onchange="cityList()">
+                        <option>Select State</option>
+                        @foreach (var item in Model.States)
+                        {
+                            <option value="@item.StateId">@item.StateName</option>
+                        }
+                    </select>
+                </div>
+            </div>
+
+            <br />
+
+            <div class="row">
+                <div class="col-md-3">City</div>
+                <div class="col-md-9">
+                    <select id="ddlCity" class="form-control">
+                        <option>Select City</option>
+                        @foreach (var item in Model.Cities)
+                        {
+                            <option value="@item.CityId">@item.CityName</option>
+                        }
+
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="~/Scripts/jquery-3.7.0.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        
+    });
+
+    function stateList() {
+        var stateName = $("#ddlState");
+        stateName.empty();
+
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("StateData", "BindDropDownList")",
+            data: { countryid: $("#ddlCountry").val() },
+            dataType: "json",
+            success: function (result) {
+                stateName.append('<option>Select States</option>')
+                $.each(result.States, function (index, value) {
+                    stateName.append(`<option value="${value.StateId}">${value.StateName}</option>`)
+                });
+                
+            },
+            error: function (req , status , error) {
+                alert(error);
+            }
+        });
+    }
+
+    function cityList() {
+        var cityName = $("#ddlCity");
+        cityName.empty();
+
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("CityData", "BindDropDownList")",
+            data: { stateid: $("#ddlState").val() },
+            dataType: "json",
+            success: function (result) {
+                cityName.append('<option>Select City</option>')
+                $.each(result.Cities, function (index, value) {
+                    cityName.append(`<option value="${value.CityId}">${value.CityName}</option>`)
+                });
+            },
+            error: function (req, status, error) {
+                alert(error);
+            }
+        })
+    }
+</script>

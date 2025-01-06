@@ -1,0 +1,49 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-10 offset-1">
+            <label>Number 1 :- </label>
+            <input type="text" id="num1" class="form-control" />
+
+            <label>Number 2 :- </label>
+            <input type="text" id="num2" class="form-control" />
+
+            <input type="submit" value="Result" onclick="FnCalculation();" class="btn btn-warning mt-1"/>
+        </div>
+
+        <div id="result" class="text-danger fw-bold">
+
+        </div>
+    </div>
+</div>
+<script src="~/Scripts/jquery-3.7.0.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        
+    });
+
+    function FnCalculation() {
+        var x = parseInt($("#num1").val());
+        var y = parseInt($("#num2").val());
+
+        $.ajax({
+            type : "POST",
+            url: "@Url.Action("Operation", "Home")",
+            data: { num1: x, num2: y },
+            dataType: "json",
+            success: function (result) {
+                var calculation = "Sum : " + result.Add + "  Sub : " + result.Sub + "  Mul : " + result.Mul + "  Div : " + result.Div;
+                $("#result").html(calculation);
+            },
+            error: function () {
+                alert("Something went wrong");
+            }
+        })
+
+    }
+
+</script>

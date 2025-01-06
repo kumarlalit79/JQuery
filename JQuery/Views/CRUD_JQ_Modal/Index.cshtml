@@ -1,0 +1,198 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+
+<div class="container">
+
+
+
+    <div class="row">
+        <div class="col-md-3"><h2>Category</h2></div>
+        <div class="col-md-6" id="errorMsg"></div>
+        <div class="col-md-3 text-end">
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-success mb-2" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Create Category
+            </button>
+
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            @*creating our custom form here*@
+
+                            <div class="form-group mb-3">
+                                <div>
+                                    <input type="text" class="form-control" id="txtname" />
+                                </div>
+                            </div>
+                            <div class="form-group mb-3">
+                                <div>
+                                    <input type="text" class="form-control" id="txtMainCategory" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="hidden" id="txthdn" value="0" />
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" onclick="FnAddCategory()">Save changes</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr />
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Main Category</th>
+                <th>Date</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody id="tbodyCategory">
+        </tbody>
+    </table>
+</div>
+
+
+<script src="~/Scripts/jquery-3.7.0.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        FnCategoryList();
+    });
+
+    function FnCategoryList() {
+        var category = $("#tbodyCategory");
+        category.empty();//means pehle baar ye hamara empty aayega uske baad ajax ke through isme append krte rahnege.
+
+        $.ajax({
+            type: "POST",
+            url : "@Url.Action("GetAllRecord", "CRUD_JQ_Modal")", // basically yaha pe API ka url mai dalte hai
+            dataType: "json",
+            success: function (result) {
+                $.each(result.data, function (index, value) { // result.data mein maine foreach loop lagaya hai, data jo backend se hame mil raha hai
+                    category.append(`
+                        <tr>
+                            <td>${value.Id}</td>
+                            <td>${value.Name}</td>
+                            <td>${value.MainCategory}</td>
+                            <td>${value.CreationDate}</td>
+                            <td>
+                                <button type="button" class="btn btn-primary mb-2" data-bs-toggle="modal" onclick="FnEditCategory(${value.Id})" data-bs-target="#exampleModal">
+                                    Edit
+                                </button>
+                                ||
+                                <a class="btn btn-secondary" onclick="FnDeleteCategory(${value.Id})">Delete</a>
+                            </td>
+
+                       </tr>
+                    `);
+                });
+            },
+            error: function (req , status , error) {
+                alert(error);
+            }
+        });
+    }
+
+    function FnAddCategory() {
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("AddUpdateCategory", "CRUD_JQ_Modal")",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({
+                "Name": $("#txtname").val(),
+                "MainCategory": $("#txtMainCategory").val(),
+                "Id": $("#txthdn").val()
+            }),
+            success: function (result) {
+                if (result.addcat) {
+                    alert("Category added successfully!");
+                } else if (result.updatecat) {
+                    alert("Category updated successfully!");
+                } else {
+                    alert("Unexpected result format.");
+                }
+
+                // Clear text fields and reset hidden field
+                $("#txtname").val("");
+                $("#txtMainCategory").val("");
+                $("#txthdn").val("0");
+
+                // Hide the modal
+                $("#exampleModal").modal("hide");
+
+                // Refresh the table
+                FnCategoryList();
+            },
+            error: function () {
+
+            }
+        });
+    }
+
+    function FnEditCategory(id) {
+        $.ajax({
+            type: "POST",
+            url : "@Url.Action("GetCategoryDetails", "CRUD_JQ_Modal")", // basically yaha pe API ka url mai dalte hai
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify({
+                "id": id //id controller ki id
+            }),
+            success: function (result) {
+                console.log(result);
+                $("#txtname").val(result.data.Name);
+                $("#txtMainCategory").val(result.data.MainCategory);
+                $("#txthdn").val(result.data.Id);
+            },
+
+            error: function (req , status , error) {
+                alert(error);
+            }
+        });
+    }
+    function FnDeleteCategory(id) {
+        let text = "Are you sure to delete this record";
+        if (confirm(text) == true) {
+            $.ajax({
+                type: "POST",
+                url : "@Url.Action("DeleteCategory", "CRUD_JQ_Modal")", 
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                data: JSON.stringify({
+                    "id": id //id controller ki id
+                }),
+                success: function (result) {
+                    if (result.success) {
+                        alert("Category deleted successfully!");
+                        FnCategoryList(); // Refresh the table to reflect deletion
+                    } else {
+                        alert("Error deleting category.");
+                    }
+                },
+
+                error: function (req , status , error) {
+                    alert(error);
+                }
+            });
+        }
+    }
+
+
+</script>

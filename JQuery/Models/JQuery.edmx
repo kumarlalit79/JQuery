@@ -1,0 +1,221 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="JQueryModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Category_JQ">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="MainCategory" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="CreationDate" Type="date" />
+        </EntityType>
+        <EntityType Name="Courses_tbl">
+          <Key>
+            <PropertyRef Name="course_id" />
+          </Key>
+          <Property Name="course_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="stream_id" Type="int" />
+          <Property Name="course_name" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Specializations_tbl">
+          <Key>
+            <PropertyRef Name="specialization_id" />
+          </Key>
+          <Property Name="specialization_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="course_id" Type="int" />
+          <Property Name="specialization_name" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Streams_tbl">
+          <Key>
+            <PropertyRef Name="stream_id" />
+          </Key>
+          <Property Name="stream_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="stream_name" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__Courses_t__strea__5BE2A6F2">
+          <End Role="Streams_tbl" Type="Self.Streams_tbl" Multiplicity="0..1" />
+          <End Role="Courses_tbl" Type="Self.Courses_tbl" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Streams_tbl">
+              <PropertyRef Name="stream_id" />
+            </Principal>
+            <Dependent Role="Courses_tbl">
+              <PropertyRef Name="stream_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Specializ__cours__5EBF139D">
+          <End Role="Courses_tbl" Type="Self.Courses_tbl" Multiplicity="0..1" />
+          <End Role="Specializations_tbl" Type="Self.Specializations_tbl" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Courses_tbl">
+              <PropertyRef Name="course_id" />
+            </Principal>
+            <Dependent Role="Specializations_tbl">
+              <PropertyRef Name="course_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="JQueryModelStoreContainer">
+          <EntitySet Name="Category_JQ" EntityType="Self.Category_JQ" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Courses_tbl" EntityType="Self.Courses_tbl" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Specializations_tbl" EntityType="Self.Specializations_tbl" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Streams_tbl" EntityType="Self.Streams_tbl" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Courses_t__strea__5BE2A6F2" Association="Self.FK__Courses_t__strea__5BE2A6F2">
+            <End Role="Streams_tbl" EntitySet="Streams_tbl" />
+            <End Role="Courses_tbl" EntitySet="Courses_tbl" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Specializ__cours__5EBF139D" Association="Self.FK__Specializ__cours__5EBF139D">
+            <End Role="Courses_tbl" EntitySet="Courses_tbl" />
+            <End Role="Specializations_tbl" EntitySet="Specializations_tbl" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="JQueryModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Category_JQ">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="MainCategory" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="CreationDate" Type="DateTime" Precision="0" />
+        </EntityType>
+        <EntityContainer Name="JQueryEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Category_JQ" EntityType="Self.Category_JQ" />
+          <EntitySet Name="Courses_tbl" EntityType="JQueryModel.Courses_tbl" />
+          <EntitySet Name="Specializations_tbl" EntityType="JQueryModel.Specializations_tbl" />
+          <EntitySet Name="Streams_tbl" EntityType="JQueryModel.Streams_tbl" />
+          <AssociationSet Name="FK__Courses_t__strea__5BE2A6F2" Association="JQueryModel.FK__Courses_t__strea__5BE2A6F2">
+            <End Role="Streams_tbl" EntitySet="Streams_tbl" />
+            <End Role="Courses_tbl" EntitySet="Courses_tbl" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Specializ__cours__5EBF139D" Association="JQueryModel.FK__Specializ__cours__5EBF139D">
+            <End Role="Courses_tbl" EntitySet="Courses_tbl" />
+            <End Role="Specializations_tbl" EntitySet="Specializations_tbl" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Courses_tbl">
+          <Key>
+            <PropertyRef Name="course_id" />
+          </Key>
+          <Property Name="course_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="stream_id" Type="Int32" />
+          <Property Name="course_name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Streams_tbl" Relationship="JQueryModel.FK__Courses_t__strea__5BE2A6F2" FromRole="Courses_tbl" ToRole="Streams_tbl" />
+          <NavigationProperty Name="Specializations_tbl" Relationship="JQueryModel.FK__Specializ__cours__5EBF139D" FromRole="Courses_tbl" ToRole="Specializations_tbl" />
+        </EntityType>
+        <EntityType Name="Specializations_tbl">
+          <Key>
+            <PropertyRef Name="specialization_id" />
+          </Key>
+          <Property Name="specialization_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="course_id" Type="Int32" />
+          <Property Name="specialization_name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Courses_tbl" Relationship="JQueryModel.FK__Specializ__cours__5EBF139D" FromRole="Specializations_tbl" ToRole="Courses_tbl" />
+        </EntityType>
+        <EntityType Name="Streams_tbl">
+          <Key>
+            <PropertyRef Name="stream_id" />
+          </Key>
+          <Property Name="stream_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="stream_name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Courses_tbl" Relationship="JQueryModel.FK__Courses_t__strea__5BE2A6F2" FromRole="Streams_tbl" ToRole="Courses_tbl" />
+        </EntityType>
+        <Association Name="FK__Courses_t__strea__5BE2A6F2">
+          <End Type="JQueryModel.Streams_tbl" Role="Streams_tbl" Multiplicity="0..1" />
+          <End Type="JQueryModel.Courses_tbl" Role="Courses_tbl" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Streams_tbl">
+              <PropertyRef Name="stream_id" />
+            </Principal>
+            <Dependent Role="Courses_tbl">
+              <PropertyRef Name="stream_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Specializ__cours__5EBF139D">
+          <End Type="JQueryModel.Courses_tbl" Role="Courses_tbl" Multiplicity="0..1" />
+          <End Type="JQueryModel.Specializations_tbl" Role="Specializations_tbl" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Courses_tbl">
+              <PropertyRef Name="course_id" />
+            </Principal>
+            <Dependent Role="Specializations_tbl">
+              <PropertyRef Name="course_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="JQueryModelStoreContainer" CdmEntityContainer="JQueryEntities">
+          <EntitySetMapping Name="Category_JQ">
+            <EntityTypeMapping TypeName="JQueryModel.Category_JQ">
+              <MappingFragment StoreEntitySet="Category_JQ">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="MainCategory" ColumnName="MainCategory" />
+                <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Courses_tbl">
+            <EntityTypeMapping TypeName="JQueryModel.Courses_tbl">
+              <MappingFragment StoreEntitySet="Courses_tbl">
+                <ScalarProperty Name="course_name" ColumnName="course_name" />
+                <ScalarProperty Name="stream_id" ColumnName="stream_id" />
+                <ScalarProperty Name="course_id" ColumnName="course_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Specializations_tbl">
+            <EntityTypeMapping TypeName="JQueryModel.Specializations_tbl">
+              <MappingFragment StoreEntitySet="Specializations_tbl">
+                <ScalarProperty Name="specialization_name" ColumnName="specialization_name" />
+                <ScalarProperty Name="course_id" ColumnName="course_id" />
+                <ScalarProperty Name="specialization_id" ColumnName="specialization_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Streams_tbl">
+            <EntityTypeMapping TypeName="JQueryModel.Streams_tbl">
+              <MappingFragment StoreEntitySet="Streams_tbl">
+                <ScalarProperty Name="stream_name" ColumnName="stream_name" />
+                <ScalarProperty Name="stream_id" ColumnName="stream_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

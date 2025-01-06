@@ -1,0 +1,71 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+            <label for="val1">Value 1</label>
+        </div>
+        <div class="col-md-9">
+            <input type="text" class="form-control" id="val1" />
+        </div>
+    </div>
+    <div class="row mt-2">
+        <div class="col-md-3">
+            <label for="val2">Value 2</label>
+        </div>
+        <div class="col-md-9">
+            <input type="text" class="form-control" id="val2" />
+        </div>
+    </div>
+    <div class="row mt-2">
+        <div class="col-md-3">
+
+        </div>
+        <div class="col-md-9">
+            <input type="submit" value="Calculate" onclick="fuCalculate();" class="btn btn-primary" id="btnAdd" />
+        </div>
+    </div>
+</div>
+
+
+<div id="result" class="text-danger fw-bolder">
+
+</div>
+
+<script src="~/Scripts/jquery-3.7.0.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        // jab hame page load pe kuch kaam karwaana ho tbhi iske andr cheeze ham likhte hai.
+    });
+
+    function fuCalculate() {
+        
+        var x = parseInt($("#val1").val());
+        var y = parseInt($("#val2").val());
+
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("CalculateMethod", "BindModel")",
+            data: { num1: x, num2: y, "name" : "Lucky"},
+            dataType: "json",
+            success: function (result) {
+
+                var calculation = "Sum : " + result.Add + " Sub : " + result.Sub + " Mul : " + result.Mul + " Division : " + result.Division; 
+
+                $("#result").html(calculation);
+                
+            },
+            error: function (req,status,error) {
+                alert(error);
+            }
+        });
+    }
+</script>

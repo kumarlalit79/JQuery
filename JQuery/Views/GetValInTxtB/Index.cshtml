@@ -1,0 +1,137 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+            <label for="val1">Value 1</label>
+        </div>
+        <div class="col-md-9">
+            <input type="text" class="form-control" id="val1" />
+        </div>
+    </div>
+    <div class="row mt-2">
+        <div class="col-md-3">
+            <label for="val2">Value 2</label>
+        </div>
+        <div class="col-md-9">
+            <input type="text" class="form-control" id="val2" />
+        </div>
+    </div>
+    <div class="row mt-2">
+        <div class="col-md-3">
+
+        </div>
+        <div class="col-md-9">
+            <input type="submit" value="Add" onclick="fuSum();" class="btn btn-primary" id="btnAdd" />
+            <input type="submit" value="Sub" onclick="fuSub();" class="btn btn-primary" id="btnAdd" />
+            <input type="submit" value="Mul" onclick="fuMul();" class="btn btn-primary" id="btnAdd" />
+            <input type="submit" value="Clear" onclick="fuClear();" class="btn btn-primary" id="btnAdd" />
+        </div>
+    </div>
+</div>
+
+
+<div id="result" class="text-danger fw-bolder">
+
+</div>
+
+
+
+
+<div>
+    <p>Passing Form Data to Controller Using jQuery</p>
+</div>
+
+<div>
+    <input type="submit" value="Addition" onclick="fnAddition();" class="btn btn-success" />
+    <input type="submit" value="Substraction" onclick="fnSubstraction();" class="btn btn-success" />
+</div>
+
+
+<script src="~/Scripts/jquery-3.7.0.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+    });
+
+
+    function fuSum() {
+        var one = parseInt($("#val1").val());
+        var two = parseInt($("#val2").val());
+
+        var result = one + two;
+
+        $("#result").html(result);
+    };
+
+    function fuSub() {
+        var one = parseInt($("#val1").val());
+        var two = parseInt($("#val2").val());
+
+        var result = one - two;
+
+        $("#result").html(result);
+    }
+
+    function fuMul() {
+        var one = parseInt($("#val1").val());
+        var two = parseInt($("#val2").val());
+
+        var result = one * two;
+
+        $("#result").html(result);
+    }
+
+    function fuClear() {
+        $("#val1").val("");
+        $("#val2").val("");
+        $("#result").hide();
+    }
+
+
+    //Passing Form Data to Controller Using jQuery
+    function fnAddition() {
+        var x = parseInt($("#val1").val());
+        var y = parseInt($("#val2").val());
+
+        // we will do it by AJAX
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("Addition" , "GetValInTxtB")",
+            data: { num1: x, num2: y },
+            dataType: "Text",
+            success: function (msg) {
+                $("#result").html(msg);
+            },
+            error: function (req, status, error) {
+                alert(status);
+            }
+        });
+    }
+
+    function fnSubstraction() {
+        var x = parseInt($("#val1").val());
+        var y = parseInt($("#val2").val());
+
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("Subtraction", "GetValInTxtB")",
+            data: { num1: x, num2: y },
+            dataType: "Text",
+            success: function (msg) {
+                $("#result").html(msg);
+            },
+            error: function () {
+                alert(status);
+            }
+        });
+    }
+
+
+</script>

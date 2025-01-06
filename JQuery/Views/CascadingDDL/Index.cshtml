@@ -1,0 +1,43 @@
+﻿@model JQuery.Models.Streams_tbl
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+@Html.DropDownListFor(x => x.stream_id , (SelectList)ViewBag.streams , "<--Choose Stream-->" ,  new {@class="form-control" , @id="ddlStream" , onchange = "FnCourse()" })
+@Html.DropDownList("course_id", (SelectList)ViewBag.course, "<--Choose Course-->", new {@class="form-control", @id = "ddlCourse" })
+@Html.DropDownList("specialization_id" , (SelectList)ViewBag.specialization, "<--Choose Specialization-->", new {@class="form-control", @id = "ddlSpecialization" })
+
+
+<script src="~/Scripts/jquery-3.7.0.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        
+    });
+
+    function FnCourse() {
+        var course = $("#ddlCourse");
+        course.empty();
+
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("CourseDropdown", "CascadingDDL")",
+            dataType: "json",
+            data: { streamId: $("#ddlStream").val() },
+            success: function (result) {
+                course.append('<option> <--Choose Course--> </option>');
+                $.each(result.course, function (index, value) {
+                    course.append(`<option value="${value.course_id}">${value.course_name}</option>`)
+                })
+            },
+            error: function (res, status, error) {
+                console.log("AJAX error:", error); 
+                console.log("XHR:", xhr);
+                console.log("Status:", status);
+            }
+        });
+    }
+</script>

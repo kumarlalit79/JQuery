@@ -1,0 +1,64 @@
+﻿@model Practise.Models.Country
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<select id="CountryDDL" name="CountryId" class="form-control">
+    <option selected>--Select Country--</option>
+    @foreach (var item in ViewBag.CountryList as SelectList)
+    {
+        <option @item.Value>@item.Text</option>
+    }
+</select>
+
+<br />
+
+<select id="StateDDL" name="StateId" class="form-control">
+    <option selected>--Select Country--</option>
+    @foreach (var item in ViewBag.StateList as SelectList)
+    {
+        <option @item.Value>@item.Text</option>
+    }
+</select>
+
+<br />
+
+<select id="CityDDL" name="CityId" class="form-control">
+    <option selected>--Select Country--</option>
+    @foreach (var item in ViewBag.CityList as SelectList)
+    {
+        <option @item.Value>@item.Text</option>
+    }
+</select>
+
+
+<script src="~/Scripts/jquery-3.7.0.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+    });
+
+    function State() {
+        var stateName = $("#StateDDL");
+        stateName.empty();
+
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("State" , "Cascadng")",
+            data: { countryId: $("#CountryDDL").val() },
+            dataType: "json",
+            success: function (result) {
+                stateName.append('<option selected>--Select State--</option>')
+                $.each(result.State, function (index, value) {
+                    stateName.append(`<option ${value.StateId}>${value.StateName}</option>`)
+                });
+            },
+            error: function (req, status, error) {
+                alert(error);
+            }
+        });
+    }
+</script>
